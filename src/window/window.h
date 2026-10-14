@@ -16,6 +16,8 @@ namespace RSE {
 
 		bool shouldClose() { return glfwWindowShouldClose(window); }
 
+		void createWindowSurface(VkInstance instance, VkSurfaceKHR* surface);
+
 		Window(const Window&) = delete;
 		Window& operator=(const Window&) = delete;
 

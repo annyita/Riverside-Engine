@@ -31,6 +31,9 @@
     <Filter Include="Source Files\render\pipeline">
       <UniqueIdentifier>{cb665736-0d01-408f-bdc4-21bb5ce87a44}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\render\device">
+      <UniqueIdentifier>{c8555c4d-5077-4580-8bd6-b11398377cba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\main.cpp">
@@ -42,8 +45,11 @@
     <ClCompile Include="src\core\rceApp.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
-    <ClCompile Include="src\render\pipeline\rcePipeline.cpp">
+    <ClCompile Include="src\render\pipeline\rsePipeline.cpp">
       <Filter>Source Files\render\pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="src\render\device\rseDevice.cpp">
+      <Filter>Source Files\render\device</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -53,8 +59,11 @@
     <ClInclude Include="src\core\rceApp.h">
       <Filter>Source Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="src\render\pipeline\rcePipeline.h">
+    <ClInclude Include="src\render\pipeline\rsePipeline.h">
       <Filter>Source Files\render\pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="src\render\device\rseDevice.hpp">
+      <Filter>Source Files\render\device</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

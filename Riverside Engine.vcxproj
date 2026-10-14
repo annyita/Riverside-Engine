@@ -21,12 +21,14 @@
   <ItemGroup>
     <ClCompile Include="src\core\main.cpp" />
     <ClCompile Include="src\core\rceApp.cpp" />
-    <ClCompile Include="src\render\pipeline\rcePipeline.cpp" />
+    <ClCompile Include="src\render\device\rseDevice.cpp" />
+    <ClCompile Include="src\render\pipeline\rsePipeline.cpp" />
     <ClCompile Include="src\window\window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\rceApp.h" />
-    <ClInclude Include="src\render\pipeline\rcePipeline.h" />
+    <ClInclude Include="src\render\device\rseDevice.hpp" />
+    <ClInclude Include="src\render\pipeline\rsePipeline.h" />
     <ClInclude Include="src\window\window.h" />
   </ItemGroup>
   <ItemGroup>

@@ -2,7 +2,8 @@
 #define RIVERSIDE_APP_CLASS_H
 
 #include <window/window.h>
-#include <render/pipeline/rcePipeline.h>
+#include <render/pipeline/rsePipeline.h>
+#include <render/device/rseDevice.hpp>
 
 namespace RSE {
 
@@ -15,8 +16,9 @@ namespace RSE {
 		void run();
 
 	private:
-		RSE::Window mainWindow{width, height, "RiversideEngine"};
-		RSE::Pipeline mainPipeline{ "Asset/Shader/vertex.spv", "Asset/Shader/fragment.spv" };
+		Window mainWindow{width, height, "RiversideEngine"};
+		rseDevice mainDevice{ mainWindow };
+		Pipeline mainPipeline{mainDevice, "Asset/Shader/vertex.spv", "Asset/Shader/fragment.spv", Pipeline::defaultPipelineConfigInfo(width, height) };
 	};
 }
 
