@@ -21,11 +21,18 @@
   <ItemGroup>
     <ClCompile Include="src\core\main.cpp" />
     <ClCompile Include="src\core\rceApp.cpp" />
+    <ClCompile Include="src\render\pipeline\rcePipeline.cpp" />
     <ClCompile Include="src\window\window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\rceApp.h" />
+    <ClInclude Include="src\render\pipeline\rcePipeline.h" />
     <ClInclude Include="src\window\window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Asset\Shader\compile.bat" />
+    <None Include="Asset\Shader\fragment.frag" />
+    <None Include="Asset\Shader\vertex.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>

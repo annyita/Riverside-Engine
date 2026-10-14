@@ -19,6 +19,18 @@
     <Filter Include="Source Files\window">
       <UniqueIdentifier>{9cb5bfb1-8397-4313-962d-33796dc6893e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\render">
+      <UniqueIdentifier>{979d8134-325b-459f-b196-159861bda847}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Asset">
+      <UniqueIdentifier>{ad2e8c15-a778-4489-b22b-c525e685ea13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Asset\Shader">
+      <UniqueIdentifier>{24fb8c37-25ba-4010-9768-ff6860fcd257}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\render\pipeline">
+      <UniqueIdentifier>{cb665736-0d01-408f-bdc4-21bb5ce87a44}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\main.cpp">
@@ -30,6 +42,9 @@
     <ClCompile Include="src\core\rceApp.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
+    <ClCompile Include="src\render\pipeline\rcePipeline.cpp">
+      <Filter>Source Files\render\pipeline</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\window\window.h">
@@ -38,5 +53,19 @@
     <ClInclude Include="src\core\rceApp.h">
       <Filter>Source Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="src\render\pipeline\rcePipeline.h">
+      <Filter>Source Files\render\pipeline</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Asset\Shader\vertex.vert">
+      <Filter>Asset\Shader</Filter>
+    </None>
+    <None Include="Asset\Shader\fragment.frag">
+      <Filter>Asset\Shader</Filter>
+    </None>
+    <None Include="Asset\Shader\compile.bat">
+      <Filter>Asset\Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>
