@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="Riverside Engine.vcxproj" />
+  <Project Path="Riverside Engine.vcxproj" Id="9ad253a0-d906-479d-a107-c40f12ff99f0" />
 </Solution>

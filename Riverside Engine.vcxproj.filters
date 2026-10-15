@@ -28,11 +28,8 @@
     <Filter Include="Asset\Shader">
       <UniqueIdentifier>{24fb8c37-25ba-4010-9768-ff6860fcd257}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\render\pipeline">
-      <UniqueIdentifier>{cb665736-0d01-408f-bdc4-21bb5ce87a44}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\render\device">
-      <UniqueIdentifier>{c8555c4d-5077-4580-8bd6-b11398377cba}</UniqueIdentifier>
+    <Filter Include="Source Files\render\vkCore">
+      <UniqueIdentifier>{e3f91d9d-824c-4d05-a1ee-0145f7a69aff}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -42,28 +39,34 @@
     <ClCompile Include="src\window\window.cpp">
       <Filter>Source Files\window</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\rceApp.cpp">
+    <ClCompile Include="src\core\rseApp.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
-    <ClCompile Include="src\render\pipeline\rsePipeline.cpp">
-      <Filter>Source Files\render\pipeline</Filter>
+    <ClCompile Include="src\render\vkCore\rseDevice.cpp">
+      <Filter>Source Files\render\vkCore</Filter>
     </ClCompile>
-    <ClCompile Include="src\render\device\rseDevice.cpp">
-      <Filter>Source Files\render\device</Filter>
+    <ClCompile Include="src\render\vkCore\rsePipeline.cpp">
+      <Filter>Source Files\render\vkCore</Filter>
+    </ClCompile>
+    <ClCompile Include="src\render\vkCore\rseSwapChain.cpp">
+      <Filter>Source Files\render\vkCore</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\window\window.h">
       <Filter>Source Files\window</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\rceApp.h">
+    <ClInclude Include="src\core\rseApp.h">
       <Filter>Source Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="src\render\pipeline\rsePipeline.h">
-      <Filter>Source Files\render\pipeline</Filter>
+    <ClInclude Include="src\render\vkCore\rseDevice.hpp">
+      <Filter>Source Files\render\vkCore</Filter>
     </ClInclude>
-    <ClInclude Include="src\render\device\rseDevice.hpp">
-      <Filter>Source Files\render\device</Filter>
+    <ClInclude Include="src\render\vkCore\rsePipeline.h">
+      <Filter>Source Files\render\vkCore</Filter>
+    </ClInclude>
+    <ClInclude Include="src\render\vkCore\rseSwapChain.hpp">
+      <Filter>Source Files\render\vkCore</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

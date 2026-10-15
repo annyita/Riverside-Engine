@@ -6,6 +6,8 @@
 #include <set>
 #include <unordered_set>
 
+#define doDevicePrint 0
+
 namespace RSE {
 
 // local callback functions
@@ -114,7 +116,11 @@ void rseDevice::pickPhysicalDevice() {
   if (deviceCount == 0) {
     throw std::runtime_error("failed to find GPUs with Vulkan support!");
   }
-  std::cout << "Device count: " << deviceCount << std::endl;
+  #if doDevicePrint == 1
+    std::cout << "Device count: " << deviceCount << std::endl;
+  #endif
+
+  
   std::vector<VkPhysicalDevice> devices(deviceCount);
   vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
 
@@ -130,7 +136,9 @@ void rseDevice::pickPhysicalDevice() {
   }
 
   vkGetPhysicalDeviceProperties(physicalDevice, &properties);
+  #if doDevicePrint == 1
   std::cout << "physical device: " << properties.deviceName << std::endl;
+  #endif
 }
 
 void rseDevice::createLogicalDevice() {
@@ -280,17 +288,25 @@ void rseDevice::hasGflwRequiredInstanceExtensions() {
   std::vector<VkExtensionProperties> extensions(extensionCount);
   vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data());
 
+  #if doDevicePrint == 1
   std::cout << "available extensions:" << std::endl;
+  #endif
   std::unordered_set<std::string> available;
   for (const auto &extension : extensions) {
+    #if doDevicePrint == 1
     std::cout << "\t" << extension.extensionName << std::endl;
+    #endif
     available.insert(extension.extensionName);
   }
 
+  #if doDevicePrint == 1
   std::cout << "required extensions:" << std::endl;
+  #endif
   auto requiredExtensions = getRequiredExtensions();
   for (const auto &required : requiredExtensions) {
+    #if doDevicePrint == 1
     std::cout << "\t" << required << std::endl;
+    #endif
     if (available.find(required) == available.end()) {
       throw std::runtime_error("Missing required glfw extension");
     }

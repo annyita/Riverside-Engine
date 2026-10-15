@@ -7,17 +7,22 @@
 
 namespace RSE {
 
-	RSE::Pipeline::Pipeline(rseDevice& device, const std::string vertPath, const std::string fragPath, const pipelineCfgInfo& cfgInfo) : mainDevice{device} {
+	RSE::rsePipeline::rsePipeline(rseDevice& device, const std::string vertPath, const std::string fragPath, const pipelineCfgInfo& cfgInfo) : mainDevice{device} {
 		createGraphicsPipeline(vertPath, fragPath, cfgInfo);
 	}
 
-	RSE::Pipeline::~Pipeline() {
+	RSE::rsePipeline::~rsePipeline() {
 		vkDestroyShaderModule(mainDevice.device(), vertShaderModule, nullptr);
 		vkDestroyShaderModule(mainDevice.device(), fragShaderModule, nullptr);
 		vkDestroyPipeline(mainDevice.device(), graphicsPipeline, nullptr);
 	}
 
-	pipelineCfgInfo RSE::Pipeline::defaultPipelineConfigInfo(uint32_t width, uint32_t height){
+	void rsePipeline::bind(VkCommandBuffer commandBuffer){
+		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
+
+	}
+
+	pipelineCfgInfo RSE::rsePipeline::defaultPipelineConfigInfo(uint32_t width, uint32_t height){
 		pipelineCfgInfo configInfo{};
 
 		configInfo.inputAssemblyInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -34,11 +39,7 @@ namespace RSE {
 		configInfo.scissor.offset = { 0, 0 };
 		configInfo.scissor.extent = { width, height };
 
-		configInfo.viewportInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-		configInfo.viewportInfo.viewportCount = 1;
-		configInfo.viewportInfo.pViewports = &configInfo.viewport;
-		configInfo.viewportInfo.scissorCount = 1;
-		configInfo.viewportInfo.pScissors = &configInfo.scissor;
+
 
 		configInfo.rasterizationInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
 		configInfo.rasterizationInfo.depthClampEnable = VK_FALSE;
@@ -95,7 +96,7 @@ namespace RSE {
 		return configInfo;
 	}
 
-	std::vector<char> RSE::Pipeline::readFile(const std::string& filePath) {
+	std::vector<char> RSE::rsePipeline::readFile(const std::string& filePath) {
 
 		std::ifstream file(filePath, std::ios::ate | std::ios::binary);
 
@@ -114,7 +115,7 @@ namespace RSE {
 		return buffer;
 	}
 
-	void RSE::Pipeline::createGraphicsPipeline(const std::string vertPath, const std::string fragPath, const pipelineCfgInfo& configInfo) {
+	void RSE::rsePipeline::createGraphicsPipeline(const std::string vertPath, const std::string fragPath, const pipelineCfgInfo& configInfo) {
 		assert(
 			configInfo.pipelineLayout != VK_NULL_HANDLE &&
 			"Cannot create graphics pipeline: no pipelineLayout provided in configInfo");
@@ -154,13 +155,20 @@ namespace RSE {
 		vertexInputInfo.pVertexAttributeDescriptions = nullptr;
 		vertexInputInfo.pVertexBindingDescriptions = nullptr;
 
+		VkPipelineViewportStateCreateInfo viewportInfo{};
+		viewportInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+		viewportInfo.viewportCount = 1;
+		viewportInfo.pViewports = &configInfo.viewport;
+		viewportInfo.scissorCount = 1;
+		viewportInfo.pScissors = &configInfo.scissor;
+
 		VkGraphicsPipelineCreateInfo pipelineInfo{};
 		pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
 		pipelineInfo.stageCount = 2;
 		pipelineInfo.pStages = shaderStages;
 		pipelineInfo.pVertexInputState = &vertexInputInfo;
 		pipelineInfo.pInputAssemblyState = &configInfo.inputAssemblyInfo;
-		pipelineInfo.pViewportState = &configInfo.viewportInfo;
+		pipelineInfo.pViewportState = &viewportInfo;
 		pipelineInfo.pRasterizationState = &configInfo.rasterizationInfo;
 		pipelineInfo.pMultisampleState = &configInfo.multisampleInfo;
 		pipelineInfo.pColorBlendState = &configInfo.colorBlendInfo;
@@ -186,7 +194,7 @@ namespace RSE {
 		}
 	}
 
-	void RSE::Pipeline::createShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule) {
+	void RSE::rsePipeline::createShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule) {
 		VkShaderModuleCreateInfo createInfo{};
 		createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
 		createInfo.codeSize = code.size();
