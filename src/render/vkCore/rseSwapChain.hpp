@@ -8,6 +8,7 @@
 // std lib headers
 #include <string>
 #include <vector>
+#include <memory>
 
 namespace RSE {
 
@@ -16,10 +17,11 @@ class rseSwapChain {
   static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
 
   rseSwapChain(rseDevice &deviceRef, VkExtent2D windowExtent);
+  rseSwapChain(rseDevice& deviceRef, VkExtent2D windowExtent, std::shared_ptr<rseSwapChain> previous);
   ~rseSwapChain();
 
   rseSwapChain(const rseSwapChain &) = delete;
-  void operator=(const rseSwapChain &) = delete;
+  rseSwapChain operator=(const rseSwapChain &) = delete;
 
   VkFramebuffer getFrameBuffer(int index) { return swapChainFramebuffers[index]; }
   VkRenderPass getRenderPass() { return renderPass; }
@@ -39,6 +41,7 @@ class rseSwapChain {
   VkResult submitCommandBuffers(const VkCommandBuffer *buffers, uint32_t *imageIndex);
 
  private:
+  void init();
   void createSwapChain();
   void createImageViews();
   void createDepthResources();
@@ -69,6 +72,7 @@ class rseSwapChain {
   VkExtent2D windowExtent;
 
   VkSwapchainKHR swapChain;
+  std::shared_ptr<rseSwapChain> oldSwapChain;
 
   std::vector<VkSemaphore> imageAvailableSemaphores;
   std::vector<VkSemaphore> renderFinishedSemaphores;

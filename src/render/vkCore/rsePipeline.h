@@ -9,14 +9,17 @@ namespace RSE {
 
 
 	struct pipelineCfgInfo {
-		VkViewport viewport;
-		VkRect2D scissor;
+		//VkViewport viewport;
+		//VkRect2D scissor;
+		VkPipelineViewportStateCreateInfo viewportInfo;
 		VkPipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
 		VkPipelineRasterizationStateCreateInfo rasterizationInfo;
 		VkPipelineMultisampleStateCreateInfo multisampleInfo;
 		VkPipelineColorBlendAttachmentState colorBlendAttachment;
 		VkPipelineColorBlendStateCreateInfo colorBlendInfo;
 		VkPipelineDepthStencilStateCreateInfo depthStencilInfo;
+		std::vector<VkDynamicState> dynamicStateEnables;
+		VkPipelineDynamicStateCreateInfo dynamicStateInfo;
 		VkPipelineLayout pipelineLayout = nullptr;
 		VkRenderPass renderPass = nullptr;
 		uint32_t subpass = 0;
@@ -29,10 +32,10 @@ namespace RSE {
 		~rsePipeline();
 
 		rsePipeline(const rsePipeline&) = delete;
-		void operator=(const rsePipeline&) = delete;
+		rsePipeline operator=(const rsePipeline&) = delete;
 
 		void bind(VkCommandBuffer commandBuffer);
-		static pipelineCfgInfo defaultPipelineConfigInfo(uint32_t width, uint32_t height);
+		static void defaultPipelineConfigInfo(pipelineCfgInfo& configInfo);
 
 	private:
 		static std::vector<char> readFile(const std::string& filePath);

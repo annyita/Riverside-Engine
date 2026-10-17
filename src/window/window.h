@@ -16,7 +16,8 @@ namespace RSE {
 
 		bool shouldClose() { return glfwWindowShouldClose(window); }
 		VkExtent2D getExtent() { return { static_cast<uint32_t>(width), static_cast<uint32_t>(height) }; }
-
+		bool wasWindowResized() { return frameBufferResized; }
+		void resetWindowResizedFlag() { frameBufferResized = false; }
 
 		void createWindowSurface(VkInstance instance, VkSurfaceKHR* surface);
 
@@ -24,10 +25,11 @@ namespace RSE {
 		Window& operator=(const Window&) = delete;
 
 	private:
-
+		static void framebufferResizedCallback(GLFWwindow* window, int width, int height);
 		void initWindow();
 		int width;
 		int height;
+		bool frameBufferResized = false;
 
 		std::string	windowName;
 

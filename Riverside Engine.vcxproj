@@ -21,16 +21,20 @@
   <ItemGroup>
     <ClCompile Include="src\core\main.cpp" />
     <ClCompile Include="src\core\rseApp.cpp" />
+    <ClCompile Include="src\render\object\rseModel.cpp" />
     <ClCompile Include="src\render\vkCore\rseDevice.cpp" />
     <ClCompile Include="src\render\vkCore\rsePipeline.cpp" />
     <ClCompile Include="src\render\vkCore\rseSwapChain.cpp" />
+    <ClCompile Include="src\util\rseTime.cpp" />
     <ClCompile Include="src\window\window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\rseApp.h" />
+    <ClInclude Include="src\render\object\rseModel.h" />
     <ClInclude Include="src\render\vkCore\rseDevice.hpp" />
     <ClInclude Include="src\render\vkCore\rsePipeline.h" />
     <ClInclude Include="src\render\vkCore\rseSwapChain.hpp" />
+    <ClInclude Include="src\util\rseTime.h" />
     <ClInclude Include="src\window\window.h" />
   </ItemGroup>
   <ItemGroup>

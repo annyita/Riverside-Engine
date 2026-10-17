@@ -31,6 +31,12 @@
     <Filter Include="Source Files\render\vkCore">
       <UniqueIdentifier>{e3f91d9d-824c-4d05-a1ee-0145f7a69aff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\util">
+      <UniqueIdentifier>{6d472f55-dc81-4249-a9b6-6cc1480c06c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\render\object">
+      <UniqueIdentifier>{16a88a94-cde4-4fd5-ab6b-dcc78e4160d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\main.cpp">
@@ -51,6 +57,12 @@
     <ClCompile Include="src\render\vkCore\rseSwapChain.cpp">
       <Filter>Source Files\render\vkCore</Filter>
     </ClCompile>
+    <ClCompile Include="src\util\rseTime.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\render\object\rseModel.cpp">
+      <Filter>Source Files\render\object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\window\window.h">
@@ -67,6 +79,12 @@
     </ClInclude>
     <ClInclude Include="src\render\vkCore\rseSwapChain.hpp">
       <Filter>Source Files\render\vkCore</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\rseTime.h">
+      <Filter>Source Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\render\object\rseModel.h">
+      <Filter>Source Files\render\object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
