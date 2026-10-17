@@ -24,11 +24,20 @@ namespace RSE {
 		}
 	}
 
+	/*
+				{{ 0.0f, -0.5f},{1.0, 0.0, 0.0} },
+			{{0.5f, 0.5f},{ 0.0, 1.0, 0.0 } },
+			{{-0.5f, 0.5f},{ 0.0, 0.0, 1.0 } },
+	*/
+
 	void app::loadModels(){
 		std::vector<Model::vertex> vertices{
-			{{ 0.0f, -0.5f},{1.0, 0.0, 0.0} },
-			{{0.5f, 0.5f},{ 0.0, 1.0, 0.0 } },
-			{{-0.5f, 0.5f},{ 0.0, 0.0, 1.0 } }
+			{{-1.0f, -1.0f},{0.0, 0.0, 0.0} },
+			{{1.0f, -1.0f},{ 1.0, 0.0, 0.0 } },
+			{{1.0f, 1.0f},{ 1.0, 1.0, 0.0 } },
+			{{1.0f, 1.0f },{ 1.0, 1.0, 0.0 } },
+			{{-1.0f, 1.0f },{ 0.0, 1.0, 0.0 } },
+			{{-1.0f, -1.0f },{ 0.0, 0.0, 0.0 } }
 		};
 
 		mainModel = std::make_unique<Model>(mainDevice, vertices);
@@ -90,7 +99,7 @@ namespace RSE {
 		recordCommandBuffer(imageIndex);
 		result = mainSwapChain->submitCommandBuffers(&commandBuffers[imageIndex], &imageIndex);
 
-		if (result == VK_ERROR_OUT_OF_DATE_KHR || VK_SUBOPTIMAL_KHR || mainWindow.wasWindowResized()) {
+		if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || mainWindow.wasWindowResized()) {
 			mainWindow.resetWindowResizedFlag();
 			recreateSwapChain();
 			return;
