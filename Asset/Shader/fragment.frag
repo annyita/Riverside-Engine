@@ -119,7 +119,7 @@ void main(){
 
     vec3 sky = vec3(0.5, 0.4, 0.7);
 
-    hitresult hr = raymarchScene(ro, rd, 4096, 0.01, 4096);
+    hitresult hr = raymarchScene(ro, rd, 80, 0.01, 128);
 
     if (!hr.isHit){
     	outColour = vec4(sky + 0.1, 1.0); return;

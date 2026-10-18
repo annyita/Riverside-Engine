@@ -25,6 +25,8 @@ namespace RSE {
 		createPipelineLayout();
 		recreateSwapChain();
 		createCommandBuffers();
+
+		mainWindow.setWindowIcon("Asset/Dependants/icon.png");
 	}
 	app::~app(){
 		vkDestroyPipelineLayout(mainDevice.device(), pipelineLayout, nullptr);

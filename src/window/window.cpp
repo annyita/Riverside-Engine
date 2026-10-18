@@ -1,40 +1,62 @@
 #include "window.h"
 #include <stdexcept>
 
-RSE::Window::Window(int w, int h, std::string name){
-	this->width = w;
-	this->height = h;
+// probably temporary
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb/stb_image.h>
 
-	this->windowName = name;
+namespace RSE {
 
-	initWindow();
-}
+	Window::Window(int w, int h, std::string name) {
+		this->width = w;
+		this->height = h;
 
-RSE::Window::~Window(){
-	glfwDestroyWindow(window);
-	glfwTerminate();
-}
+		this->windowName = name;
 
-void RSE::Window::createWindowSurface(VkInstance instance, VkSurfaceKHR* surface){
-	if (glfwCreateWindowSurface(instance, window, nullptr, surface) != VK_SUCCESS) {
-		throw std::runtime_error("failed to create window surface");
+		initWindow();
 	}
-}
 
-void RSE::Window::initWindow(){
-	glfwInit();
+	Window::~Window() {
+		glfwDestroyWindow(window);
+		glfwTerminate();
+	}
 
-	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-	glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+	void Window::setWindowIcon(std::string path) {
+		int iconW, iconH;
+		int iconChannels;
+		stbi_set_flip_vertically_on_load(false);
 
-	window = glfwCreateWindow(width, height, windowName.c_str(), nullptr, nullptr);
-	glfwSetWindowUserPointer(window, this);
-	glfwSetFramebufferSizeCallback(window, framebufferResizedCallback);
-}
+		unsigned char* pixelsIcon = stbi_load((path).c_str(), &iconW, &iconH, &iconChannels, STBI_rgb_alpha);
 
-void RSE::Window::framebufferResizedCallback(GLFWwindow* window, int width, int height) {
-	auto rseWindow = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
-	rseWindow->frameBufferResized = true;
-	rseWindow->width = width;
-	rseWindow->height = height;
+		GLFWimage Iconinages[1];
+		Iconinages[0].width = iconW;
+		Iconinages[0].height = iconH;
+		Iconinages[0].pixels = pixelsIcon;
+
+		glfwSetWindowIcon(window, 1, Iconinages);
+	}
+
+	void Window::createWindowSurface(VkInstance instance, VkSurfaceKHR* surface) {
+		if (glfwCreateWindowSurface(instance, window, nullptr, surface) != VK_SUCCESS) {
+			throw std::runtime_error("failed to create window surface");
+		}
+	}
+
+	void Window::initWindow() {
+		glfwInit();
+
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+
+		window = glfwCreateWindow(width, height, windowName.c_str(), nullptr, nullptr);
+		glfwSetWindowUserPointer(window, this);
+		glfwSetFramebufferSizeCallback(window, framebufferResizedCallback);
+	}
+
+	void Window::framebufferResizedCallback(GLFWwindow* window, int width, int height) {
+		auto rseWindow = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
+		rseWindow->frameBufferResized = true;
+		rseWindow->width = width;
+		rseWindow->height = height;
+	}
 }
