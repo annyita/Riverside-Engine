@@ -24,6 +24,8 @@ namespace RSE {
 		Window(const Window&) = delete;
 		Window& operator=(const Window&) = delete;
 
+		GLFWwindow* getWindowPointer() { return window; };
+
 	private:
 		static void framebufferResizedCallback(GLFWwindow* window, int width, int height);
 		void initWindow();

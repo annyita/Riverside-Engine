@@ -21,6 +21,8 @@
   <ItemGroup>
     <ClCompile Include="src\core\main.cpp" />
     <ClCompile Include="src\core\rseApp.cpp" />
+    <ClCompile Include="src\game\camera.cpp" />
+    <ClCompile Include="src\game\game.cpp" />
     <ClCompile Include="src\render\object\rseModel.cpp" />
     <ClCompile Include="src\render\vkCore\rseDevice.cpp" />
     <ClCompile Include="src\render\vkCore\rsePipeline.cpp" />
@@ -30,6 +32,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\rseApp.h" />
+    <ClInclude Include="src\game\camera.h" />
+    <ClInclude Include="src\game\game.h" />
     <ClInclude Include="src\render\object\rseModel.h" />
     <ClInclude Include="src\render\vkCore\rseDevice.hpp" />
     <ClInclude Include="src\render\vkCore\rsePipeline.h" />

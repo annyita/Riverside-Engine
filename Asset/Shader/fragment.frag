@@ -3,6 +3,15 @@
 layout (location = 0) in vec3 vertexColour;
 layout (location = 0) out vec4 outColour;
 
+layout(push_constant) uniform Push{
+	float offset;
+	vec3 position;
+    mat4 cameraMatrix;
+    mat4 projection;
+	mat4 view;
+} push;
+
+
 struct hitresult{
     vec3 normal;
     vec3 hitpos;
@@ -16,13 +25,31 @@ float sdSphere( vec3 p, float r ){
   return length(p) - r;
 }
 
+float sdTorus( vec3 p, vec2 t ){
+  vec2 q = vec2(length(p.xz)-t.x,p.y);
+  return length(q)-t.y;
+}
+
+mat2 rot2D(float angle){
+    float s = sin(angle);
+    float c = cos(angle);
+    return mat2(c, -s, s, c);
+}
+
 float scene(vec3 p){
    
    p = p - vec3(2.0, 2.0, 3.0);
 
-   vec3 modP = mod(p + vec3(3.0) * 0.5, vec3(3.0) ) - vec3(3.0) * 0.5f;
+   //p.xz *= rot2D(sin(push.offset) * 0.5);
 
-    return sdSphere(modP, 1.0);
+   vec3 range = vec3(max(sin(push.offset) * 50.0, 5.0));
+
+   vec3 modP = mod(p + range * 0.5, range ) - range * 0.5f;
+
+   //modP.xy *= rot2D(1.0);
+   modP.yz *= rot2D(sin(push.offset) * 3.0);
+
+    return sdTorus(modP, vec2(0.5));
     //return 1.0f;
 }
 
@@ -69,15 +96,42 @@ hitresult raymarchScene(vec3 ro, vec3 rd, float maxdist, float mindist, int step
     return hr;
 }
 
+vec3 rayDirfromCam(mat4 projection, mat4 view, vec2 uv){
+    vec4 target = projection * vec4(uv.x, uv.y, -1.0, 1.0);
+    vec3 rayDirView = normalize(target.xyz / target.w);
+    vec3 rayDirWorld = normalize(mat3(view) * rayDirView);
+
+    return normalize(rayDirWorld);
+}
+
 void main(){
     vec2 uv = (vertexColour.rg * 2.0 - 1.0);
     uv.x *= 1920 / 1080;
 
-    vec3 ro = vec3(0.0, 0.0, -3.0);
-    vec3 rd = vec3(uv.rg, 1.0);
+    float sinoff =  sin(push.offset);
 
-    hitresult hr = raymarchScene(ro, rd, 80, 0.01, 80);
+    vec3 ro = push.position;// + vec3(0.0 + push.offset, sinoff, -3.0 + push.offset - sinoff * 3.0);
+    //vec3 rd = vec3(uv.rg, 1.0);
+    vec3 rd = rayDirfromCam(push.projection, push.view, uv);
+    //rd = 1.0 - rd;
 
-	//outColour = vec4(1.0, 1.0, 0.0, 1.0);
-	outColour = vec4(hr.normal, 1.0);
+    //float sinoff = 1.0 - sin(push.offset);
+
+    vec3 sky = vec3(0.5, 0.4, 0.7);
+
+    hitresult hr = raymarchScene(ro, rd, 4096, 0.01, 4096);
+
+    if (!hr.isHit){
+    	outColour = vec4(sky + 0.1, 1.0); return;
+    }
+
+    vec3 lightDirection = vec3(0.5f, -1.0f, 0.5f);
+    float diffuse = max(dot(hr.normal, lightDirection), 0.0f);
+
+    //vec3(1.0) +  // * vec3(1.0, sinoff * 0.5, 1.0)
+    //vec3 final = vec3(push.colour) * mix(sky, vec3(1.0), diffuse);
+    vec3 final = vec3(1.0) * mix(vec3(0.1), vec3(1.0), diffuse); // push.colour
+
+
+	outColour = vec4(final, 1.0);
 }

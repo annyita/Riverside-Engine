@@ -11,6 +11,7 @@ namespace RSE {
 			float lastFrameTime;
 			float time;
 			float priorTime;
+			int frame;
 		};
 
 		static timer mainTimer;

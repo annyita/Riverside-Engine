@@ -37,6 +37,9 @@
     <Filter Include="Source Files\render\object">
       <UniqueIdentifier>{16a88a94-cde4-4fd5-ab6b-dcc78e4160d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\game">
+      <UniqueIdentifier>{583da3de-439a-4236-b91d-bee6b85192bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\main.cpp">
@@ -63,6 +66,12 @@
     <ClCompile Include="src\render\object\rseModel.cpp">
       <Filter>Source Files\render\object</Filter>
     </ClCompile>
+    <ClCompile Include="src\game\game.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\camera.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\window\window.h">
@@ -85,6 +94,12 @@
     </ClInclude>
     <ClInclude Include="src\render\object\rseModel.h">
       <Filter>Source Files\render\object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\game.h">
+      <Filter>Source Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\camera.h">
+      <Filter>Source Files\game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

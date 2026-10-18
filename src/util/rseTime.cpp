@@ -9,4 +9,5 @@ void RSE::rseTime::updateTimer(timer& t){
     t.time = static_cast<float>(glfwGetTime()); // currentFrameTime
     t.deltatime = t.time - t.lastFrameTime;
     t.lastFrameTime = t.time;
+    t.frame++;
 }

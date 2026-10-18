@@ -1,9 +1,24 @@
 #include <rseApp.h>
+
+#define GLM_FORCE_RADIANS
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
+#include <glm/glm.hpp>
+
 #include <stdexcept>
 #include <array>
 #include <util/rseTime.h>
 
+#include <game/game.h>
+
 namespace RSE {
+
+	struct simplePushConstantData {
+		float offset;
+		alignas(16) glm::vec3 position;
+		alignas(16) glm::mat4 cameraMatrix;
+		alignas(16) glm::mat4 projection;
+		alignas(16) glm::mat4 view;
+	};
 
 	app::app() {
 		loadModels();
@@ -20,6 +35,8 @@ namespace RSE {
 		while (!mainWindow.shouldClose()) {
 			glfwPollEvents();
 			rseTime::updateTimer(rseTime::mainTimer);
+			RSEGAME::game::renderUpdate(mainWindow.getWindowPointer(), rseTime::mainTimer.deltatime, width, height);
+			RSEGAME::game::update();
 			drawFrame();
 		}
 	}
@@ -28,9 +45,16 @@ namespace RSE {
 				{{ 0.0f, -0.5f},{1.0, 0.0, 0.0} },
 			{{0.5f, 0.5f},{ 0.0, 1.0, 0.0 } },
 			{{-0.5f, 0.5f},{ 0.0, 0.0, 1.0 } },
+
+						{{-0.5f, -0.5f},{0.0, 0.0, 0.0} },
+			{{0.5f, -0.5f},{ 1.0, 0.0, 0.0 } },
+			{{0.5f, 0.5f},{ 1.0, 1.0, 0.0 } },
+			{{0.5f, 0.5f },{ 1.0, 1.0, 0.0 } },
+			{{-0.5f, 0.5f },{ 0.0, 1.0, 0.0 } },
+			{{-0.5f, -0.5f },{ 0.0, 0.0, 0.0 } }
 	*/
 
-	void app::loadModels(){
+	void app::loadModels(){ // made 0.5 instead of 1 to zoom out for tut im following to learn vk
 		std::vector<Model::vertex> vertices{
 			{{-1.0f, -1.0f},{0.0, 0.0, 0.0} },
 			{{1.0f, -1.0f},{ 1.0, 0.0, 0.0 } },
@@ -44,12 +68,18 @@ namespace RSE {
 	}
 
 	void app::createPipelineLayout() {
+
+		VkPushConstantRange pushConstantRange{};
+		pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
+		pushConstantRange.offset = 0;
+		pushConstantRange.size = sizeof(simplePushConstantData);
+
 		VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
 		pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
 		pipelineLayoutInfo.setLayoutCount = 0;
 		pipelineLayoutInfo.pSetLayouts = nullptr;
-		pipelineLayoutInfo.pushConstantRangeCount = 0;
-		pipelineLayoutInfo.pPushConstantRanges = nullptr;
+		pipelineLayoutInfo.pushConstantRangeCount = 1;
+		pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
 		if (vkCreatePipelineLayout(mainDevice.device(), &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create pipeline layout");
 		}
@@ -79,7 +109,7 @@ namespace RSE {
 	}
 
 	void app::freeCommandBuffes(){
-		vkFreeCommandBuffers(mainDevice.device(), mainDevice.getCommandPool(), static_cast<float>(commandBuffers.size()), commandBuffers.data());
+		vkFreeCommandBuffers(mainDevice.device(), mainDevice.getCommandPool(), static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
 		commandBuffers.clear();
 	}
 
@@ -138,6 +168,7 @@ namespace RSE {
 	}
 
 	void app::recordCommandBuffer(int imageIndex){
+
 		//imageIndex	
 		VkCommandBufferBeginInfo beginInfo{};
 		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -175,6 +206,22 @@ namespace RSE {
 		mainPipeline->bind(commandBuffers[imageIndex]);
 		//vkCmdDraw(commandBuffers[i], 3, 1, 0, 0);
 		mainModel->bind(commandBuffers[imageIndex]);
+
+		simplePushConstantData push{};
+		push.offset = { RSEGAME::game::offset}; // * rseTime::mainTimer.deltatime
+		push.position = RSEGAME::game::camera.position;
+		push.cameraMatrix = RSEGAME::game::camera.cameraMatrix;
+		push.projection = glm::inverse(RSEGAME::game::camera.projection);
+		push.view = glm::inverse(RSEGAME::game::camera.view);
+
+		vkCmdPushConstants(commandBuffers[imageIndex],
+			pipelineLayout,
+			VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+			0,
+			sizeof(simplePushConstantData),
+			&push
+		);
+
 		mainModel->draw(commandBuffers[imageIndex]);
 
 		vkCmdEndRenderPass(commandBuffers[imageIndex]);
