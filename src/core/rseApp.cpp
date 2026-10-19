@@ -10,18 +10,18 @@
 
 #include <game/game.h>
 
+#include <util/rseMath.h>
+
 namespace RSE {
 
 	struct simplePushConstantData {
-		float offset;
 		alignas(16) glm::vec3 position;
 		alignas(16) glm::mat4 cameraMatrix;
-		alignas(16) glm::mat4 projection;
-		alignas(16) glm::mat4 view;
+		alignas(16) glm::mat4 modelMatrix;
 	};
 
 	app::app() {
-		loadModels();
+		loadEntities();
 		createPipelineLayout();
 		recreateSwapChain();
 		createCommandBuffers();
@@ -43,34 +43,115 @@ namespace RSE {
 		}
 	}
 
-	/*
-				{{ 0.0f, -0.5f},{1.0, 0.0, 0.0} },
-			{{0.5f, 0.5f},{ 0.0, 1.0, 0.0 } },
-			{{-0.5f, 0.5f},{ 0.0, 0.0, 1.0 } },
-
-						{{-0.5f, -0.5f},{0.0, 0.0, 0.0} },
-			{{0.5f, -0.5f},{ 1.0, 0.0, 0.0 } },
-			{{0.5f, 0.5f},{ 1.0, 1.0, 0.0 } },
-			{{0.5f, 0.5f },{ 1.0, 1.0, 0.0 } },
-			{{-0.5f, 0.5f },{ 0.0, 1.0, 0.0 } },
-			{{-0.5f, -0.5f },{ 0.0, 0.0, 0.0 } }
-	*/
-
-	void app::loadModels(){ // made 0.5 instead of 1 to zoom out for tut im following to learn vk
-		std::vector<Model::vertex> vertices{
-			{{-1.0f, -1.0f},{0.0, 0.0, 0.0} },
-			{{1.0f, -1.0f},{ 1.0, 0.0, 0.0 } },
-			{{1.0f, 1.0f},{ 1.0, 1.0, 0.0 } },
-			{{1.0f, 1.0f },{ 1.0, 1.0, 0.0 } },
-			{{-1.0f, 1.0f },{ 0.0, 1.0, 0.0 } },
-			{{-1.0f, -1.0f },{ 0.0, 0.0, 0.0 } }
+	void app::loadEntities(){
+		std::vector<Mesh::vertex> vertices{
+			{ { 0.0f, -0.5f, 0.0f },{ 1.0, 0.0 } },
+			{ { 0.5f, 0.5f, 0.0f },{ 0.0, 1.0 } },
+			{ { -0.5f, 0.5f, 0.0f },{ 0.0, 0.0 } },
 		};
 
-		mainModel = std::make_unique<Model>(mainDevice, vertices);
+		std::vector<Mesh::vertex> vertices2{
+
+			// front
+			{ { -1.0f, -1.0f, 1.0f },{ 0.0f, 0.0f } },
+			{ { 1.0f, -1.0f, 1.0f },{ 1.0f, 0.0f } },
+			{ { 1.0f,  1.0f, 1.0f },{ 1.0f, 1.0f } },
+			{ { 1.0f,  1.0f, 1.0f },{ 1.0f, 1.0f } },
+			{ { -1.0f,  1.0f, 1.0f },{ 0.0f, 1.0f } },
+			{ { -1.0f, -1.0f, 1.0f },{ 0.0f, 0.0f } },
+
+
+			// back
+			{ { -1.0f, -1.0f, -1.0f },{ 0.0f, 0.0f } },
+			{ { 1.0f, -1.0f, -1.0f },{ 1.0f, 0.0f } },
+			{ { 1.0f,  1.0f, -1.0f },{ 1.0f, 1.0f } },
+			{ { 1.0f,  1.0f, -1.0f },{ 1.0f, 1.0f } },
+			{ { -1.0f,  1.0f, -1.0f },{ 0.0f, 1.0f } },
+			{ { -1.0f, -1.0f, -1.0f },{ 0.0f, 0.0f } },
+
+
+			// left
+			{ { -1.0f, -1.0f, -1.0f },{ 0.0f, 0.0f } },
+			{ { -1.0f, -1.0f,  1.0f },{ 1.0f, 0.0f } },
+			{ { -1.0f,  1.0f,  1.0f },{ 1.0f, 1.0f } },
+			{ { -1.0f,  1.0f,  1.0f },{ 1.0f, 1.0f } },
+			{ { -1.0f,  1.0f, -1.0f },{ 0.0f, 1.0f } },
+			{ { -1.0f, -1.0f, -1.0f },{ 0.0f, 0.0f } },
+
+			// right
+			{ { 1.0f, -1.0f,  1.0f },{ 0.0f, 0.0f } },
+			{ { 1.0f, -1.0f, -1.0f },{ 1.0f, 0.0f } },
+			{ { 1.0f,  1.0f, -1.0f },{ 1.0f, 1.0f } },
+			{ { 1.0f,  1.0f, -1.0f },{ 1.0f, 1.0f } },
+			{ { 1.0f,  1.0f,  1.0f },{ 0.0f, 1.0f } },
+			{ { 1.0f, -1.0f,  1.0f },{ 0.0f, 0.0f } },
+
+
+			// bottom
+			{ { -1.0f, -1.0f, -1.0f },{ 0.0f, 0.0f } },
+			{ { 1.0f, -1.0f,  1.0f },{ 1.0f, 1.0f } },
+			{ { 1.0f, -1.0f, -1.0f },{ 1.0f, 0.0f } },
+			{ { 1.0f, -1.0f,  1.0f },{ 1.0f, 1.0f } },
+			{ { -1.0f, -1.0f,  1.0f },{ 0.0f, 1.0f } },
+			{ { -1.0f, -1.0f, -1.0f },{ 0.0f, 0.0f } },
+
+			// top
+			{ { -1.0f, 1.0f, -1.0f },{ 0.0f, 0.0f } },
+			{ { 1.0f, 1.0f, -1.0f },{ 1.0f, 0.0f } },
+			{ { 1.0f, 1.0f,  1.0f },{ 1.0f, 1.0f } },
+			{ { 1.0f, 1.0f,  1.0f },{ 1.0f, 1.0f } },
+			{ { -1.0f, 1.0f,  1.0f },{ 0.0f, 1.0f } },
+			{ { -1.0f, 1.0f, -1.0f },{ 0.0f, 0.0f } }
+		};
+
+		std::vector<Mesh::vertex> vertices3{
+
+			// front
+			{ { -1.0f, -1.0f, 0.0f },{ 0.0f, 0.0f } },
+			{ { 1.0f, -1.0f, 0.0f },{ 1.0f, 0.0f } },
+			{ { 1.0f,  1.0f, 0.0f },{ 1.0f, 1.0f } },
+			{ { 1.0f,  1.0f, 0.0f },{ 1.0f, 1.0f } },
+			{ { -1.0f,  1.0f, 0.0f },{ 0.0f, 1.0f } },
+			{ { -1.0f, -1.0f, 0.0f },{ 0.0f, 0.0f } },
+
+			// right
+			{ { 0.0f, -1.0f,  1.0f },{ 0.0f, 0.0f } },
+			{ { 0.0f, -1.0f, -1.0f },{ 1.0f, 0.0f } },
+			{ { 0.0f,  1.0f, -1.0f },{ 1.0f, 1.0f } },
+			{ { 0.0f,  1.0f, -1.0f },{ 1.0f, 1.0f } },
+			{ { 0.0f,  1.0f,  1.0f },{ 0.0f, 1.0f } },
+			{ { 0.0f, -1.0f,  1.0f },{ 0.0f, 0.0f } },
+
+			// top
+			{ { -1.0f, 0.0f, -1.0f },{ 0.0f, 0.0f } },
+			{ { 1.0f, 0.0f, -1.0f },{ 1.0f, 0.0f } },
+			{ { 1.0f, 0.0f,  1.0f },{ 1.0f, 1.0f } },
+			{ { 1.0f, 0.0f,  1.0f },{ 1.0f, 1.0f } },
+			{ { -1.0f, 0.0f,  1.0f },{ 0.0f, 1.0f } },
+			{ { -1.0f, 0.0f, -1.0f },{ 0.0f, 0.0f } }
+		};
+
+		auto model = std::make_shared<Mesh>(mainDevice, vertices);
+
+		auto model2 = std::make_shared<Mesh>(mainDevice, vertices2);
+
+		auto model3 = std::make_shared<Mesh>(mainDevice, vertices3);
+
+		entityHandler::entity newEntity;
+		newEntity.render.mesh = model;
+
+		entityHandler::entity newEntity2;
+		newEntity2.render.mesh = model2;
+
+		entityHandler::entity newEntity3;
+		newEntity3.render.mesh = model3;
+
+		entityHandler::create(newEntity);
+		entityHandler::create(newEntity2);
+		entityHandler::create(newEntity3);
 	}
 
 	void app::createPipelineLayout() {
-
 		VkPushConstantRange pushConstantRange{};
 		pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
 		pushConstantRange.offset = 0;
@@ -90,7 +171,7 @@ namespace RSE {
 
 	void app::createPipeline(){
 		pipelineCfgInfo pipelineConfig{};
-		rsePipeline::defaultPipelineConfigInfo(pipelineConfig); // mainSwapChain->getSwapChainExtent().width, mainSwapChain->getSwapChainExtent().height
+		rsePipeline::defaultPipelineConfigInfo(pipelineConfig);
 		pipelineConfig.renderPass = mainSwapChain->getRenderPass();
 		pipelineConfig.pipelineLayout = pipelineLayout;
 		mainPipeline = std::make_unique<rsePipeline>(mainDevice, "Asset/Shader/vertex.spv", "Asset/Shader/fragment.spv", pipelineConfig);
@@ -188,7 +269,7 @@ namespace RSE {
 		renderPassInfo.renderArea.extent = mainSwapChain->getSwapChainExtent();
 
 		std::array<VkClearValue, 2> clearValues{};
-		clearValues[0].color = { 0.1f, 0.1f, 0.1f, 1.0f };
+		clearValues[0].color = { 0.3f, 0.3f, 0.9f, 1.0f };
 		clearValues[1].depthStencil = { 1.0f, 0 };
 		renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
 		renderPassInfo.pClearValues = clearValues.data();
@@ -205,32 +286,36 @@ namespace RSE {
 		vkCmdSetViewport(commandBuffers[imageIndex], 0, 1, &viewport);
 		vkCmdSetScissor(commandBuffers[imageIndex], 0, 1, &scissor);
 
-		mainPipeline->bind(commandBuffers[imageIndex]);
-		//vkCmdDraw(commandBuffers[i], 3, 1, 0, 0);
-		mainModel->bind(commandBuffers[imageIndex]);
-
-		simplePushConstantData push{};
-		push.offset = { RSEGAME::game::offset}; // * rseTime::mainTimer.deltatime
-		push.position = RSEGAME::game::camera.position;
-		push.cameraMatrix = RSEGAME::game::camera.cameraMatrix;
-		push.projection = glm::inverse(RSEGAME::game::camera.projection);
-		push.view = glm::inverse(RSEGAME::game::camera.view);
-
-		vkCmdPushConstants(commandBuffers[imageIndex],
-			pipelineLayout,
-			VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-			0,
-			sizeof(simplePushConstantData),
-			&push
-		);
-
-		mainModel->draw(commandBuffers[imageIndex]);
+		renderEntities(commandBuffers[imageIndex]);
 
 		vkCmdEndRenderPass(commandBuffers[imageIndex]);
 		if (vkEndCommandBuffer(commandBuffers[imageIndex]) != VK_SUCCESS) {
 			throw std::runtime_error("failed to record command buffer");
 		}
 
+	}
+
+	void app::renderEntities(VkCommandBuffer commandBuffer){
+		mainPipeline->bind(commandBuffer);
+
+		for (auto& entityHandler : entityHandler::entities) {
+
+			simplePushConstantData push{};
+			push.position = RSEGAME::game::camera.position + glm::vec3(0.0f, RSEGAME::game::camera.bob, 0.0f);
+			push.cameraMatrix = RSEGAME::game::camera.cameraMatrix;
+			push.modelMatrix = entityHandler.transform.matrix;
+
+			vkCmdPushConstants(commandBuffer,
+				pipelineLayout,
+				VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+				0,
+				sizeof(simplePushConstantData),
+				&push
+			);
+
+			entityHandler.render.mesh->bind(commandBuffer);
+			entityHandler.render.mesh->draw(commandBuffer);
+		}
 	}
 
 }

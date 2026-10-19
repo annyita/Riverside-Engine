@@ -3,6 +3,8 @@
 
 #include <render/vkCore/rseDevice.hpp>
 
+#include <vulkan/vulkan.h>
+
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <glm/glm.hpp>
@@ -11,21 +13,23 @@
 
 namespace RSE {
 
-	class Model {
+	class Mesh {
 	public:
 
 		struct vertex {
-			glm::vec2 position;
-			glm::vec3 colour;
+			glm::vec3 position;
+			//glm::vec3 normal;
+			glm::vec2 uv;
+
 			static std::vector<VkVertexInputBindingDescription> getBindingDescriptions();
 			static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions();
 		};
 
-		Model(rseDevice &device, const std::vector<vertex>& vertices);
-		~Model();
+		Mesh(rseDevice &device, const std::vector<vertex>& vertices);
+		~Mesh();
 
-		Model(const Model&) = delete;
-		Model &operator=(const Model&) = delete;
+		Mesh(const Mesh&) = delete;
+		Mesh&operator=(const Mesh&) = delete;
 
 		void bind(VkCommandBuffer commandBuffer);
 		void draw(VkCommandBuffer commandBuffer);

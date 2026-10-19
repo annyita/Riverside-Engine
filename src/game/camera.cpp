@@ -31,7 +31,11 @@ namespace RSEGAME {
         projection[1][1] *= -1.0f;
 
         cameraMatrix = projection * view;
-	}
+	
+        // inv matrices
+        invProjection = glm::inverse(projection);
+        invView = glm::inverse(view);
+    }
 
 	void Camera::inputsMouse(GLFWwindow* window){
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -96,18 +100,41 @@ namespace RSEGAME {
     void Camera::Inputs(GLFWwindow* window, float deltatime){
         float adjustedSpeed = speed * deltatime;
 
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-            position += adjustedSpeed * Orientation;
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-            position += adjustedSpeed * -glm::normalize(glm::cross(Orientation, Up));
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-            position += adjustedSpeed * -Orientation;
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-            position += adjustedSpeed * glm::normalize(glm::cross(Orientation, Up));
+        doingWASD = false;
+
+        // wasd
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+            position += adjustedSpeed * Orientation;                                    doingWASD = true;
+        }
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+            position += adjustedSpeed * -glm::normalize(glm::cross(Orientation, Up));   doingWASD = true;
+        }
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+            position += adjustedSpeed * -Orientation;                                   doingWASD = true;
+        }
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+            position += adjustedSpeed * glm::normalize(glm::cross(Orientation, Up));    doingWASD = true;
+        }
+
+        if (doViewBob) {
+
+            if (doingWASD) {
+                bobAccumulate += 15.0 * deltatime;
+                bobIntensity = 1.0f;
+            }
+            else bobIntensity = glm::max(bobIntensity - 3.0f * deltatime, 0.0f);
+
+            bob = sin(bobAccumulate) * (0.015 * bobIntensity);
+        }
+
+        // up and down
         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) //jump
             position += adjustedSpeed * Up;
         if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
             position += adjustedSpeed * -Up;
+
+
+        // sprint and flight speed
         if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
             s_scrollSpeed += 10.0f * deltatime;
         if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)

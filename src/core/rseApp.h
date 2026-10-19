@@ -6,7 +6,8 @@
 #include <render/vkCore/rseDevice.hpp>
 #include <render/vkCore/rseSwapChain.hpp>
 
-#include <render/object/rseModel.h>
+#include <render/object/rseMesh.h>
+#include <game/scene/entityHandler.h>
 
 #include <memory>
 #include <vector>
@@ -28,7 +29,10 @@ namespace RSE {
 		void run();
 
 	private:
-		void loadModels();
+
+
+		void loadEntities();
+		
 		void createPipelineLayout();
 		void createPipeline();
 		void createCommandBuffers();
@@ -36,8 +40,9 @@ namespace RSE {
 		void drawFrame();
 		void recreateSwapChain();
 		void recordCommandBuffer(int imageIndex);
+		void renderEntities(VkCommandBuffer commandBuffer);
 
-		Window mainWindow{width, height, "RiversideEngine"};
+		Window mainWindow{width, height, "Riverside Engine"};
 		rseDevice mainDevice{ mainWindow };
 		//rseSwapChain mainSwapChain{ mainDevice, mainWindow.getExtent() };
 		std::unique_ptr<rseSwapChain> mainSwapChain;
@@ -45,7 +50,6 @@ namespace RSE {
 		std::unique_ptr<rsePipeline> mainPipeline;
 		VkPipelineLayout pipelineLayout;
 		std::vector<VkCommandBuffer> commandBuffers;
-		std::unique_ptr<Model> mainModel;
 	};
 }
 

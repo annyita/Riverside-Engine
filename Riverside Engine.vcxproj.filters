@@ -40,6 +40,9 @@
     <Filter Include="Source Files\game">
       <UniqueIdentifier>{583da3de-439a-4236-b91d-bee6b85192bb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\game\scene">
+      <UniqueIdentifier>{cfd78f0f-1cd1-4842-a1df-7bdc59ae3390}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\main.cpp">
@@ -63,7 +66,7 @@
     <ClCompile Include="src\util\rseTime.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
-    <ClCompile Include="src\render\object\rseModel.cpp">
+    <ClCompile Include="src\render\object\rseMesh.cpp">
       <Filter>Source Files\render\object</Filter>
     </ClCompile>
     <ClCompile Include="src\game\game.cpp">
@@ -71,6 +74,15 @@
     </ClCompile>
     <ClCompile Include="src\game\camera.cpp">
       <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\rseMath.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\scene\entityHandler.cpp">
+      <Filter>Source Files\game\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\UUID.cpp">
+      <Filter>Source Files\util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -92,7 +104,7 @@
     <ClInclude Include="src\util\rseTime.h">
       <Filter>Source Files\util</Filter>
     </ClInclude>
-    <ClInclude Include="src\render\object\rseModel.h">
+    <ClInclude Include="src\render\object\rseMesh.h">
       <Filter>Source Files\render\object</Filter>
     </ClInclude>
     <ClInclude Include="src\game\game.h">
@@ -100,6 +112,15 @@
     </ClInclude>
     <ClInclude Include="src\game\camera.h">
       <Filter>Source Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\rseMath.h">
+      <Filter>Source Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\scene\entityHandler.h">
+      <Filter>Source Files\game\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\UUID.h">
+      <Filter>Source Files\util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

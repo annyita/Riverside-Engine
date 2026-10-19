@@ -23,22 +23,28 @@
     <ClCompile Include="src\core\rseApp.cpp" />
     <ClCompile Include="src\game\camera.cpp" />
     <ClCompile Include="src\game\game.cpp" />
-    <ClCompile Include="src\render\object\rseModel.cpp" />
+    <ClCompile Include="src\game\scene\entityHandler.cpp" />
+    <ClCompile Include="src\render\object\rseMesh.cpp" />
     <ClCompile Include="src\render\vkCore\rseDevice.cpp" />
     <ClCompile Include="src\render\vkCore\rsePipeline.cpp" />
     <ClCompile Include="src\render\vkCore\rseSwapChain.cpp" />
+    <ClCompile Include="src\util\rseMath.cpp" />
     <ClCompile Include="src\util\rseTime.cpp" />
+    <ClCompile Include="src\util\UUID.cpp" />
     <ClCompile Include="src\window\window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\rseApp.h" />
     <ClInclude Include="src\game\camera.h" />
     <ClInclude Include="src\game\game.h" />
-    <ClInclude Include="src\render\object\rseModel.h" />
+    <ClInclude Include="src\game\scene\entityHandler.h" />
+    <ClInclude Include="src\render\object\rseMesh.h" />
     <ClInclude Include="src\render\vkCore\rseDevice.hpp" />
     <ClInclude Include="src\render\vkCore\rsePipeline.h" />
     <ClInclude Include="src\render\vkCore\rseSwapChain.hpp" />
+    <ClInclude Include="src\util\rseMath.h" />
     <ClInclude Include="src\util\rseTime.h" />
+    <ClInclude Include="src\util\UUID.h" />
     <ClInclude Include="src\window\window.h" />
   </ItemGroup>
   <ItemGroup>

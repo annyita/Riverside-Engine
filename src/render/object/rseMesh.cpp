@@ -1,28 +1,28 @@
-#include "rseModel.h"
+#include "rseMesh.h"
 
 #include <cassert>
 #include <cstring>
 
 namespace RSE {
-	Model::Model(rseDevice& device, const std::vector<vertex>& vertices) : mainDevice{ device }{
+	Mesh::Mesh(rseDevice& device, const std::vector<vertex>& vertices) : mainDevice{ device }{
 		createVertexBuffers(vertices);
 	}
-	Model::~Model(){
+	Mesh::~Mesh(){
 		vkDestroyBuffer(mainDevice.device(), vertexBuffer, nullptr);
 		vkFreeMemory(mainDevice.device(), vertexBufferMemory, nullptr);
 	}
 
-	void Model::draw(VkCommandBuffer commandBuffer){
+	void Mesh::draw(VkCommandBuffer commandBuffer){
 		vkCmdDraw(commandBuffer, vertexCount, 1, 0, 0);
 	}
 	
-	void Model::bind(VkCommandBuffer commandBuffer){
+	void Mesh::bind(VkCommandBuffer commandBuffer){
 		VkBuffer buffers[] = { vertexBuffer};
 		VkDeviceSize offsets[] = { 0 };
 		vkCmdBindVertexBuffers(commandBuffer, 0, 1, buffers, offsets);
 	}
 
-	void Model::createVertexBuffers(const std::vector<vertex>& vertices){
+	void Mesh::createVertexBuffers(const std::vector<vertex>& vertices){
 		vertexCount = static_cast<uint32_t>(vertices.size());
 		assert(vertexCount >= 3 && "Vertex count must be at least 3");
 		VkDeviceSize bufferSize = sizeof(vertices[0]) * vertexCount;
@@ -39,7 +39,11 @@ namespace RSE {
 		vkUnmapMemory(mainDevice.device(), vertexBufferMemory);
 	}
 
-	std::vector<VkVertexInputBindingDescription> Model::vertex::getBindingDescriptions(){
+
+
+	// vertices
+
+	std::vector<VkVertexInputBindingDescription> Mesh::vertex::getBindingDescriptions(){
 		std::vector<VkVertexInputBindingDescription> bindingDescriptions(1);
 		bindingDescriptions[0].binding = 0;
 		bindingDescriptions[0].stride = sizeof(vertex);
@@ -47,17 +51,22 @@ namespace RSE {
 
 		return bindingDescriptions;
 	}
-	std::vector<VkVertexInputAttributeDescription> Model::vertex::getAttributeDescriptions(){
+	std::vector<VkVertexInputAttributeDescription> Mesh::vertex::getAttributeDescriptions(){
 		std::vector<VkVertexInputAttributeDescription> attributeDescriptions(2);
 		attributeDescriptions[0].binding = 0;
 		attributeDescriptions[0].location = 0;
-		attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT;
+		attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT; // VK_FORMAT_R32G32_SFLOAT
 		attributeDescriptions[0].offset = 0;
+
+		//attributeDescriptions[1].binding = 0;
+		//attributeDescriptions[1].location = 1;
+		//attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+		//attributeDescriptions[1].offset = offsetof(vertex, normal);
 
 		attributeDescriptions[1].binding = 0;
 		attributeDescriptions[1].location = 1;
-		attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-		attributeDescriptions[1].offset = offsetof(vertex, colour);
+		attributeDescriptions[1].format = VK_FORMAT_R32G32_SFLOAT;
+		attributeDescriptions[1].offset = offsetof(vertex, uv);
 
 		return attributeDescriptions;
 	}

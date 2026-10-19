@@ -1,6 +1,6 @@
 #include "rsePipeline.h"
 
-#include <render/object/rseModel.h>
+#include <render/object/rseMesh.h>
 
 #include <fstream>
 #include <stdexcept>
@@ -163,8 +163,8 @@ namespace RSE {
 		shaderStages[1].pNext = nullptr;
 		shaderStages[1].pSpecializationInfo = nullptr;
 
-		auto bindingDescriptions = Model::vertex::getBindingDescriptions();
-		auto attributeDescriptions = Model::vertex::getAttributeDescriptions();
+		auto bindingDescriptions = Mesh::vertex::getBindingDescriptions();
+		auto attributeDescriptions = Mesh::vertex::getAttributeDescriptions();
 		VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
 		vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 		vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
