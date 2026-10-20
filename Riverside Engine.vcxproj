@@ -25,6 +25,8 @@
     <ClCompile Include="src\game\game.cpp" />
     <ClCompile Include="src\game\scene\entityHandler.cpp" />
     <ClCompile Include="src\render\object\rseMesh.cpp" />
+    <ClCompile Include="src\render\rseRenderer.cpp" />
+    <ClCompile Include="src\render\simpleRenderSystem.cpp" />
     <ClCompile Include="src\render\vkCore\rseDevice.cpp" />
     <ClCompile Include="src\render\vkCore\rsePipeline.cpp" />
     <ClCompile Include="src\render\vkCore\rseSwapChain.cpp" />
@@ -39,6 +41,8 @@
     <ClInclude Include="src\game\game.h" />
     <ClInclude Include="src\game\scene\entityHandler.h" />
     <ClInclude Include="src\render\object\rseMesh.h" />
+    <ClInclude Include="src\render\rseRenderer.h" />
+    <ClInclude Include="src\render\simpleRenderSystem.h" />
     <ClInclude Include="src\render\vkCore\rseDevice.hpp" />
     <ClInclude Include="src\render\vkCore\rsePipeline.h" />
     <ClInclude Include="src\render\vkCore\rseSwapChain.hpp" />

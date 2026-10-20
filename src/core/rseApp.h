@@ -2,9 +2,8 @@
 #define RIVERSIDE_APP_CLASS_H
 
 #include <window/window.h>
-#include <render/vkCore/rsePipeline.h>
 #include <render/vkCore/rseDevice.hpp>
-#include <render/vkCore/rseSwapChain.hpp>
+#include <render/rseRenderer.h>
 
 #include <render/object/rseMesh.h>
 #include <game/scene/entityHandler.h>
@@ -32,24 +31,10 @@ namespace RSE {
 
 
 		void loadEntities();
-		
-		void createPipelineLayout();
-		void createPipeline();
-		void createCommandBuffers();
-		void freeCommandBuffes();
-		void drawFrame();
-		void recreateSwapChain();
-		void recordCommandBuffer(int imageIndex);
-		void renderEntities(VkCommandBuffer commandBuffer);
 
 		Window mainWindow{width, height, "Riverside Engine"};
 		rseDevice mainDevice{ mainWindow };
-		//rseSwapChain mainSwapChain{ mainDevice, mainWindow.getExtent() };
-		std::unique_ptr<rseSwapChain> mainSwapChain;
-		//rsePipeline mainPipeline{mainDevice, "Asset/Shader/vertex.spv", "Asset/Shader/fragment.spv", rsePipeline::defaultPipelineConfigInfo(width, height) };
-		std::unique_ptr<rsePipeline> mainPipeline;
-		VkPipelineLayout pipelineLayout;
-		std::vector<VkCommandBuffer> commandBuffers;
+		rseRenderer mainRenderer{ mainWindow, mainDevice };
 	};
 }
 

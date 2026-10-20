@@ -40,7 +40,6 @@ namespace RSE {
 	}
 
 
-
 	// vertices
 
 	std::vector<VkVertexInputBindingDescription> Mesh::vertex::getBindingDescriptions(){
