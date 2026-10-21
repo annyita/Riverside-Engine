@@ -5,7 +5,6 @@
 #include <render/vkCore/rseDevice.hpp>
 #include <render/rseRenderer.h>
 
-#include <render/object/rseMesh.h>
 #include <game/scene/entityHandler.h>
 
 #include <memory>

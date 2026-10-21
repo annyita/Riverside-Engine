@@ -136,15 +136,13 @@ namespace RSEGAME {
 
         // sprint and flight speed
         if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-            s_scrollSpeed += 10.0f * deltatime;
+            s_scrollSpeed = glm::max(s_scrollSpeed + 10.0f * deltatime, 0.0f);
         if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-            s_scrollSpeed -= 10.0f * deltatime;
+            s_scrollSpeed = glm::max(s_scrollSpeed - 10.0f * deltatime, 0.0f);
+
         if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
             speed = (10.0f + s_scrollSpeed);
-        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
-            speed = (5.0f + s_scrollSpeed);
-
-        speed = s_scrollSpeed;
+        else speed = (5.0f + s_scrollSpeed);
     }
 
 }

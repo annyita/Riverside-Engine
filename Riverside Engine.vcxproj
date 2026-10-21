@@ -25,8 +25,10 @@
     <ClCompile Include="src\game\game.cpp" />
     <ClCompile Include="src\game\scene\entityHandler.cpp" />
     <ClCompile Include="src\render\object\rseMesh.cpp" />
+    <ClCompile Include="src\render\object\rseModel.cpp" />
     <ClCompile Include="src\render\rseRenderer.cpp" />
     <ClCompile Include="src\render\simpleRenderSystem.cpp" />
+    <ClCompile Include="src\render\vkCore\rseBuffer.cpp" />
     <ClCompile Include="src\render\vkCore\rseDevice.cpp" />
     <ClCompile Include="src\render\vkCore\rsePipeline.cpp" />
     <ClCompile Include="src\render\vkCore\rseSwapChain.cpp" />
@@ -41,8 +43,10 @@
     <ClInclude Include="src\game\game.h" />
     <ClInclude Include="src\game\scene\entityHandler.h" />
     <ClInclude Include="src\render\object\rseMesh.h" />
+    <ClInclude Include="src\render\object\rseModel.h" />
     <ClInclude Include="src\render\rseRenderer.h" />
     <ClInclude Include="src\render\simpleRenderSystem.h" />
+    <ClInclude Include="src\render\vkCore\rseBuffer.h" />
     <ClInclude Include="src\render\vkCore\rseDevice.hpp" />
     <ClInclude Include="src\render\vkCore\rsePipeline.h" />
     <ClInclude Include="src\render\vkCore\rseSwapChain.hpp" />
@@ -109,12 +113,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>src;src\core;src\libraries\include;src\libraries\include\glm;src\libraries\include\GLFW;$(IncludePath)</IncludePath>
-    <LibraryPath>src\libraries\lib\GLFW;$(LibraryPath)</LibraryPath>
+    <IncludePath>src;src\core;src\libraries\include;src\libraries\include\glm;src\libraries\include\GLFW;src\libraries\include\assimp;$(IncludePath)</IncludePath>
+    <LibraryPath>src\libraries\lib\GLFW;src\libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>src;src\core;src\libraries\include;src\libraries\include\glm;src\libraries\include\GLFW;$(IncludePath)</IncludePath>
-    <LibraryPath>src\libraries\lib\GLFW;$(LibraryPath)</LibraryPath>
+    <IncludePath>src;src\core;src\libraries\include;src\libraries\include\glm;src\libraries\include\GLFW;src\libraries\include\assimp;$(IncludePath)</IncludePath>
+    <LibraryPath>src\libraries\lib\GLFW;src\libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -162,7 +166,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc145-mt.lib;vulkan-1.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(VULKAN_SDK)\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Manifest>
@@ -183,7 +187,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc145-mt.lib;vulkan-1.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(VULKAN_SDK)\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Manifest>

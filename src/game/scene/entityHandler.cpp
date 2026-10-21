@@ -26,4 +26,16 @@ namespace RSE {
 		entities[index].transform.matrix = rseMath::trsToTransformMatrix(position, glm::radians(rotation), scale);
 	}
 
+	void entityHandler::transform(int index){
+		entities[index].transform.matrix = rseMath::trsToTransformMatrix(
+			entities[index].transform.position,
+			glm::radians(entities[index].transform.rotation),
+			entities[index].transform.scale
+		);
+	}
+
+	void entityHandler::destroy(){
+		entityHandler::entities.clear();
+	}
+
 }

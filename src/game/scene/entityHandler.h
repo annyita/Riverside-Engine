@@ -4,11 +4,18 @@
 #include <vector>
 #include <memory>
 #include <render/object/rseMesh.h>
+#include <render/object/rseModel.h>
 
 namespace RSE {
 
 	class entityHandler{
 	public:
+
+		enum renderTypes {
+			type_null = 0,
+			type_mesh = 1,
+			type_model = 2
+		};
 
 		struct transformation {
 			glm::vec3 position = glm::vec3(0.0f);
@@ -20,7 +27,10 @@ namespace RSE {
 
 		struct rendering {
 			std::shared_ptr<Mesh> mesh{};
+			std::shared_ptr<Model> model{};
 			uint64_t renderid = -1;
+			bool doRender = true;
+			renderTypes renderType = type_null;
 		};
 
 		struct entity {
@@ -48,7 +58,9 @@ namespace RSE {
 		}
 
 		static void transform(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, int index);
+		static void transform(int index);
 
+		static void destroy();
 
 	private:
 

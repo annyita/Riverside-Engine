@@ -37,7 +37,7 @@ namespace RSEGAME {
 
 	private:
 		bool MouseState = true, toggleESC = true; bool firstClick = false;
-		float s_scrollSpeed = 5.0f;
+		float s_scrollSpeed = 0.0f;
 		int width = 0;
 		int height = 0;
 
