@@ -96,6 +96,9 @@
     <ClCompile Include="src\render\vkCore\rseBuffer.cpp">
       <Filter>Source Files\render\vkCore</Filter>
     </ClCompile>
+    <ClCompile Include="src\render\vkCore\rseDescriptors.cpp">
+      <Filter>Source Files\render\vkCore</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\window\window.h">
@@ -144,6 +147,9 @@
       <Filter>Source Files\render\object</Filter>
     </ClInclude>
     <ClInclude Include="src\render\vkCore\rseBuffer.h">
+      <Filter>Source Files\render\vkCore</Filter>
+    </ClInclude>
+    <ClInclude Include="src\render\vkCore\rseDescriptors.h">
       <Filter>Source Files\render\vkCore</Filter>
     </ClInclude>
   </ItemGroup>

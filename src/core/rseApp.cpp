@@ -22,10 +22,16 @@ namespace RSE {
 
 	struct globalUBO{
 		glm::mat4 cameraMatrix;
-		glm::vec3 lightDir = glm::normalize(glm::vec3{1.0, -3.0, 1.0});
+		glm::vec3 lightDir = glm::vec3(1.0, 1.0, 0.0);
 	};
 
 	app::app() {
+		globalPool = rseDescriptorPool::Builder(mainDevice)
+			.setMaxSets(rseSwapChain::MAX_FRAMES_IN_FLIGHT)
+			.addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, rseSwapChain::MAX_FRAMES_IN_FLIGHT)
+			.build();
+
+
 		loadEntities();
 
 		mainWindow.setWindowIcon("Asset/Dependants/icon.png");
@@ -48,7 +54,19 @@ namespace RSE {
 			uboBuffers[i]->map();
 		}
 
-		simpleRenderSystem simpleRenderSystem{ mainDevice, mainRenderer.getSwapChainRenderPass() };
+		auto globalSetLayout = rseDescriptorSetLayout::Builder(mainDevice)
+			.addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT)
+			.build();
+
+		std::vector<VkDescriptorSet> globalDescriptorSets(rseSwapChain::MAX_FRAMES_IN_FLIGHT);
+		for (size_t i = 0; i < globalDescriptorSets.size(); i++){
+			auto bufferInfo = uboBuffers[i]->descriptorInfo();
+			rseDescriptorWriter(*globalSetLayout, *globalPool)
+				.writeBuffer(0, &bufferInfo)
+				.build(globalDescriptorSets[i]);
+		}
+
+		simpleRenderSystem simpleRenderSystem{ mainDevice, mainRenderer.getSwapChainRenderPass(), globalSetLayout->getDescriptorSetLayout() };
 
 		while (!mainWindow.shouldClose()) {
 			glfwPollEvents();
@@ -60,11 +78,12 @@ namespace RSE {
 
 				globalUBO ubo{};
 				ubo.cameraMatrix = RSEGAME::game::camera.cameraMatrix;
+				ubo.lightDir = glm::normalize(glm::vec3(1.0, 1.0, 0.0));
 				uboBuffers[mainRenderer.getFrameIndex()]->writeToBuffer(&ubo);
 				uboBuffers[mainRenderer.getFrameIndex()]->flush();
 					
 				mainRenderer.beginSwapChainRenderPass(commandBuffer);
-				simpleRenderSystem.renderEntities(commandBuffer);
+				simpleRenderSystem.renderEntities(commandBuffer, globalDescriptorSets[mainRenderer.getFrameIndex()]);
 				mainRenderer.endSwapChainRenderPass(commandBuffer);
 				mainRenderer.endFrame();
 			}
@@ -72,7 +91,7 @@ namespace RSE {
 			// restarting the render pipeline
 			if (glfwGetKey(mainWindow.getWindowPointer(), GLFW_KEY_F3) == GLFW_PRESS && 
 				glfwGetKey(mainWindow.getWindowPointer(), GLFW_KEY_R) == GLFW_PRESS) {
-				simpleRenderSystem.recreateRenderSystem(mainRenderer.getSwapChainRenderPass());
+				simpleRenderSystem.recreateRenderSystem(mainRenderer.getSwapChainRenderPass(), globalSetLayout->getDescriptorSetLayout());
 			}
 		}
 	}
@@ -83,11 +102,12 @@ namespace RSE {
 		//auto newModel = std::make_shared<Model>("Asset/Model/trans robot thingy/trans_robot.gltf", mainDevice);
 		auto newModel = std::make_shared<Model>("Asset/Model/bistro/Bistro.gltf", mainDevice);
 
+		/*
 		entityHandler::entity newEntity;
 		newEntity.render.model = std::make_shared<Model>("Asset/Model/basic shapes 2/cube.gltf", mainDevice);
 		newEntity.render.renderType = entityHandler::type_model;
 		newEntity.render.doRender = true;
-
+		
 		entityHandler::entity newEntity2;
 		newEntity2.render.model = std::make_shared<Model>("Asset/Model/basic shapes 2/sphere.gltf", mainDevice);
 		newEntity2.render.renderType = entityHandler::type_model;
@@ -97,7 +117,7 @@ namespace RSE {
 		newEntity3.render.model = std::make_shared<Model>("Asset/Model/basic shapes/torus.gltf", mainDevice);
 		newEntity3.render.renderType = entityHandler::type_model;
 		newEntity3.render.doRender = true;
-
+		*/
 
 		entityHandler::entity newEntity4;
 		newEntity4.render.model = newModel;
@@ -106,11 +126,12 @@ namespace RSE {
 
 		newEntity4.transform.position = glm::vec3(10.0f, -5.0f, 0.0f);
 		newEntity4.transform.rotation = glm::vec3(0.0f, -75.0f, 0.0f);
-
-		entityHandler::create(newEntity);
-		entityHandler::create(newEntity2);
-		entityHandler::create(newEntity3);
+		
+		//entityHandler::create(newEntity);
+		//entityHandler::create(newEntity2);
+		//entityHandler::create(newEntity3);
 		entityHandler::create(newEntity4);
 		entityHandler::transform(entityHandler::entities.size() - 1);
+		
 	}
 }

@@ -4,6 +4,7 @@
 #include <window/window.h>
 #include <render/vkCore/rseDevice.hpp>
 #include <render/rseRenderer.h>
+#include <render/vkCore/rseDescriptors.h>
 
 #include <game/scene/entityHandler.h>
 
@@ -34,6 +35,8 @@ namespace RSE {
 		Window mainWindow{width, height, "Riverside Engine"};
 		rseDevice mainDevice{ mainWindow };
 		rseRenderer mainRenderer{ mainWindow, mainDevice };
+
+		std::unique_ptr<rseDescriptorPool> globalPool{};
 	};
 }
 

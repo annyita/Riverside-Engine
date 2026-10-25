@@ -14,9 +14,9 @@ namespace RSEGAME {
 
 		offset += 5.0 * RSE::rseTime::mainTimer.deltatime;
 
-		RSE::entityHandler::transform(glm::vec3(-4.0f, glm::sin(offset) * 0.1, 0.0f), glm::vec3(0.0f, offset, 0.0f), glm::vec3(1.0f), 0);
-		RSE::entityHandler::transform(glm::vec3(0.0f, glm::sin(offset) * 0.1, 0.0f), glm::vec3(offset, 0.0f, 0.0f), glm::vec3(1.0f), 1);
-		RSE::entityHandler::transform(glm::vec3(4.0f, glm::sin(offset) * 0.1, 0.0f), glm::vec3(0.0f, offset, 0.0f), glm::vec3(1.0f), 2);
+		//RSE::entityHandler::transform(glm::vec3(-4.0f, glm::sin(offset) * 0.1, 0.0f), glm::vec3(0.0f, offset, 0.0f), glm::vec3(1.0f), 0);
+		//RSE::entityHandler::transform(glm::vec3(0.0f, glm::sin(offset) * 0.1, 0.0f), glm::vec3(offset, 0.0f, 0.0f), glm::vec3(1.0f), 1);
+		//RSE::entityHandler::transform(glm::vec3(4.0f, glm::sin(offset) * 0.1, 0.0f), glm::vec3(0.0f, offset, 0.0f), glm::vec3(1.0f), 2);
 
 		/*
 		accumulator += RSE::rseTime::mainTimer.deltatime;

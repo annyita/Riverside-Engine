@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -9,11 +7,13 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include <vector>
-
 #include <render/object/rseMesh.h>
 
+#include <cstdint>
+#include <vector>
 #include <memory>
+#include <string>
+
 
 namespace RSE {
 
@@ -29,8 +29,6 @@ namespace RSE {
 
 		uint64_t uuid;
 
-		std::vector<std::shared_ptr<Mesh>> meshes{};
-
 		struct localTransformation {
 			glm::vec3 localPosition = glm::vec3(0.0f);
 			glm::quat localqRotation = glm::quat(0.0f, 0.0f, 0.0f, 0.0f);
@@ -39,6 +37,7 @@ namespace RSE {
 			glm::mat4 matrix = glm::mat4(1.0f);
 		};
 
+		std::vector<std::shared_ptr<Mesh>> meshes{};
 		std::vector<localTransformation> localTransformations;
 
 	private:
@@ -49,7 +48,6 @@ namespace RSE {
 		void loadModel();
 		void processNode(aiNode* node, const aiScene* scene);
 		void processPositions(aiNode* node);
-
 
 		std::vector<Mesh::vertex> assembleVertices(aiMesh* mesh);
 		std::vector<uint32_t> assembleIndices(aiMesh* mesh);

@@ -11,22 +11,22 @@ namespace RSE {
 	class simpleRenderSystem {
 	public:
 
-		simpleRenderSystem(rseDevice& device, VkRenderPass renderPass);
+		simpleRenderSystem(rseDevice& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout);
 		~simpleRenderSystem();
 
-		void recreateRenderSystem(VkRenderPass renderPass);
+		void recreateRenderSystem(VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout);
 
 		simpleRenderSystem(const simpleRenderSystem&) = delete;
 		simpleRenderSystem& operator=(const simpleRenderSystem&) = delete;
 
-		void renderEntities(VkCommandBuffer commandBuffer);
+		void renderEntities(VkCommandBuffer commandBuffer, VkDescriptorSet globalDescriptorSet);
 
 	private:
 
 		void renderMesh(VkCommandBuffer commandBuffer, auto& entityHandler);
 		void renderModel(VkCommandBuffer commandBuffer, auto& entityHandler);
 
-		void createPipelineLayout();
+		void createPipelineLayout(VkDescriptorSetLayout globalSetLayout);
 		void createPipeline(VkRenderPass renderPass);
 
 		rseDevice& mainDevice;

@@ -20,13 +20,12 @@ namespace RSE {
 
 	struct simplePushConstantData {
 		alignas(16) glm::vec3 position;
-		alignas(16) glm::mat4 cameraMatrix;
 		alignas(16) glm::mat4 modelMatrix;
 		alignas(16) glm::mat4 normalMatrix;
 	};
 
-	simpleRenderSystem::simpleRenderSystem(rseDevice& device, VkRenderPass renderPass) : mainDevice(device) {
-		createPipelineLayout();
+	simpleRenderSystem::simpleRenderSystem(rseDevice& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout) : mainDevice(device) {
+		createPipelineLayout(globalSetLayout);
 		createPipeline(renderPass);
 	}
 
@@ -34,14 +33,25 @@ namespace RSE {
 		vkDestroyPipelineLayout(mainDevice.device(), pipelineLayout, nullptr);
 	}
 
-	void simpleRenderSystem::recreateRenderSystem(VkRenderPass renderPass){
+	void simpleRenderSystem::recreateRenderSystem(VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout){
 		vkDestroyPipelineLayout(mainDevice.device(), pipelineLayout, nullptr);
-		createPipelineLayout();
+		createPipelineLayout(globalSetLayout);
 		createPipeline(renderPass);
 	}
 
-	void simpleRenderSystem::renderEntities(VkCommandBuffer commandBuffer){
+	void simpleRenderSystem::renderEntities(VkCommandBuffer commandBuffer, VkDescriptorSet globalDescriptorSet){
 		mainPipeline->bind(commandBuffer);
+
+		vkCmdBindDescriptorSets(
+			commandBuffer,
+			VK_PIPELINE_BIND_POINT_GRAPHICS,
+			pipelineLayout,
+			0,
+			1,
+			&globalDescriptorSet,
+			0,
+			nullptr
+		);
 
 		for (auto& entityHandler : entityHandler::entities) {
 
@@ -62,7 +72,6 @@ namespace RSE {
 	void simpleRenderSystem::renderMesh(VkCommandBuffer commandBuffer, auto& entityHandler){
 		simplePushConstantData push{};
 		push.position = RSEGAME::game::camera.position + glm::vec3(0.0f, RSEGAME::game::camera.bob, 0.0f);
-		push.cameraMatrix = RSEGAME::game::camera.cameraMatrix;
 		push.modelMatrix = entityHandler.transform.matrix;
 		push.normalMatrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(push.modelMatrix))));
 
@@ -79,11 +88,9 @@ namespace RSE {
 	}
 
 	void simpleRenderSystem::renderModel(VkCommandBuffer commandBuffer, auto& entityHandler){
-
 		for (size_t i = 0; i < entityHandler.render.model->meshes.size(); i++){
 			simplePushConstantData push{};
 			push.position = RSEGAME::game::camera.position + glm::vec3(0.0f, RSEGAME::game::camera.bob, 0.0f);
-			push.cameraMatrix = RSEGAME::game::camera.cameraMatrix;
 			push.modelMatrix = entityHandler.render.model->localTransformations[i].matrix * entityHandler.transform.matrix;
 			push.normalMatrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(push.modelMatrix))));
 
@@ -100,16 +107,19 @@ namespace RSE {
 		}
 	}
 
-	void simpleRenderSystem::createPipelineLayout(){
+	void simpleRenderSystem::createPipelineLayout(VkDescriptorSetLayout globalSetLayout){
 		VkPushConstantRange pushConstantRange{};
 		pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
 		pushConstantRange.offset = 0;
 		pushConstantRange.size = sizeof(simplePushConstantData);
 
+		std::vector<VkDescriptorSetLayout> descriptorSetLayouts{ globalSetLayout };
+
+
 		VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
 		pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-		pipelineLayoutInfo.setLayoutCount = 0;
-		pipelineLayoutInfo.pSetLayouts = nullptr;
+		pipelineLayoutInfo.setLayoutCount = static_cast<uint32_t>(descriptorSetLayouts.size());
+		pipelineLayoutInfo.pSetLayouts = descriptorSetLayouts.data();
 		pipelineLayoutInfo.pushConstantRangeCount = 1;
 		pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
 		if (vkCreatePipelineLayout(mainDevice.device(), &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {

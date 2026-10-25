@@ -9,10 +9,13 @@ layout(location = 5) in vec3 biTangents;
 
 layout (location = 0) out vec4 outColour;
 
+layout(set = 0, binding = 0) uniform GlobalUBO {
+		mat4 cameraMatrix;
+		vec3 lightDir;
+} ubo;
 
 layout(push_constant) uniform Push{
 	vec3 position;
-    mat4 cameraMatrix;
 	mat4 modelMatrix;
 	mat4 normalMatrix;
 } push;
@@ -28,9 +31,8 @@ void main(){
 	mat3 nTBN = mat3(nTangent, nBitangent, nNormal);
 	vec3 newNormal = normalize(nTBN * normalTex);
 
-
-	vec3 lightDirection = vec3(1.0f, 1.0f, 0.0f);
-    float diffuse = max(dot(normal, lightDirection), 0.0f);
+	//	vec3 lightDirection = vec3(1.0f, 1.0f, 0.0f);
+    float diffuse = max(dot(newNormal, ubo.lightDir), 0.0f);
 
 	//outColour = vec4(uv, 0.0, 1.0);
 	//outColour = vec4(newNormal, 1.0);

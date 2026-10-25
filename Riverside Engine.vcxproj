@@ -29,6 +29,7 @@
     <ClCompile Include="src\render\rseRenderer.cpp" />
     <ClCompile Include="src\render\simpleRenderSystem.cpp" />
     <ClCompile Include="src\render\vkCore\rseBuffer.cpp" />
+    <ClCompile Include="src\render\vkCore\rseDescriptors.cpp" />
     <ClCompile Include="src\render\vkCore\rseDevice.cpp" />
     <ClCompile Include="src\render\vkCore\rsePipeline.cpp" />
     <ClCompile Include="src\render\vkCore\rseSwapChain.cpp" />
@@ -47,6 +48,7 @@
     <ClInclude Include="src\render\rseRenderer.h" />
     <ClInclude Include="src\render\simpleRenderSystem.h" />
     <ClInclude Include="src\render\vkCore\rseBuffer.h" />
+    <ClInclude Include="src\render\vkCore\rseDescriptors.h" />
     <ClInclude Include="src\render\vkCore\rseDevice.hpp" />
     <ClInclude Include="src\render\vkCore\rsePipeline.h" />
     <ClInclude Include="src\render\vkCore\rseSwapChain.hpp" />

@@ -14,9 +14,13 @@ layout(location = 3) out vec2 uv;
 layout(location = 4) out vec3 tangents;
 layout(location = 5) out vec3 biTangents;
 
+layout(set = 0, binding = 0) uniform GlobalUBO {
+		mat4 cameraMatrix;
+		vec3 lightDir;
+} ubo;
+
 layout(push_constant) uniform Push{
 	vec3 position;
-	mat4 cameraMatrix;
 	mat4 modelMatrix;
 	mat4 normalMatrix;
 } push;
@@ -51,6 +55,6 @@ void main(){ //  + push.offset
     tangents = normalMatrix * aTangents;
     biTangents = normalMatrix * aBiTangents;
 
-	gl_Position = push.cameraMatrix * ncp;
+	gl_Position = ubo.cameraMatrix * ncp;
 }
 	
